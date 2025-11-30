@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>To-Do List</title>
+  <style>
+    :root{
+      --purple1:#7b47e6;
+      --purple2:#6b33d8;
+      --border:#dedede;
+      --muted:#9b9b9b;
+      --yellow:#ffdf66;
+      --bg:#fafafa;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    body{background:var(--bg);display:flex;align-items:center;justify-content:center;height:100vh;margin:0}
+
+    .card{
+      width:420px;
+      background:white;
+      border-radius:14px;
+      border:1px solid var(--border);
+      padding:28px 34px 40px;
+      position:relative;
+      box-shadow:0 2px 0 rgba(0,0,0,0.02);
+    }
+
+    .card::before{
+      /* yellow header bar like design */
+      content:'';
+      position:absolute;
+      left:12px;
+      right:12px;
+      top:8px;
+      height:32px;
+      border-radius:10px;
+      background:var(--yellow);
+    }
+
+    h1{
+        font-size:36px;
+        text-align:center;
+        margin:20px 0 26px;
+        font-weight:800}
+
+    /* sort button top-right */
+    .sort-btn{
+      position:absolute;
+      right:18px;
+      top:56px;
+      color:var(--muted);
+      border:none;
+      background:transparent;
+      cursor:pointer;
+      font-size:18px;
+      display:flex;
+      align-items:center;
+      gap:6px
+    }
+    .sort-btn svg{opacity:0.9}
+
+    .input-wrap{
+        display:flex;
+        align-items:center;
+        gap:12px;
+        margin-bottom:28px}
+    .input{
+      flex:1;
+      padding:18px 20px;
+      border-radius:18px;
+      border:2px solid var(--border);
+      font-size:16px;
+      outline:none
+    }
+    .clear-btn{
+        background:transparent;
+        border:2px solid var(--border);
+        width:42px;
+        height:42px;
+        border-radius:50%;
+        display:inline-grid;
+        place-items:center;
+        cursor:pointer}
+
+    /* Add button */
+    .add-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:14px;
+      background:linear-gradient(90deg,var(--purple1),var(--purple2));
+      color:white;
+      padding:16px 28px;
+      border-radius:40px;
+      border:none;
+      font-size:18px;
+      cursor:pointer;
+      box-shadow:0 6px 18px rgba(107,51,216,0.18)
+    }
+    .add-icon{
+        width:46px;
+        height:46px;
+        border-radius:50%;
+        background:rgba(255,255,255,0.08);
+        display:inline-grid;
+        place-items:center;
+        font-weight:700}
+
+    /* list */
+    .list-wrap{
+        border:1px solid var(--border);
+        border-radius:12px;
+        padding:18px;
+        margin-bottom:26px;
+        background:white}
+    .task{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        padding:14px 6px;
+        border-radius:8px}
+    .task + .task{
+        border-top:1px solid #f0f0f0}
+    .task-text{font-size:18px}
+
+    /* delete button: circular X that on hover becomes purple like design */
+    .delete-btn{
+      width:36px;
+      height:36px;
+      border-radius:50%;
+      border:2px solid var(--border);
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      transition:all .18s ease;
+      position:relative;
+      background:transparent
+    }
+    .delete-btn:hover{
+        background:var(--purple1);
+        border-color:var(--purple1);
+        transform:translateY(-4px) scale(1.03)}
+    .delete-btn:hover svg{fill:#fff}
+    .delete-btn svg{
+        width:14px;
+        height:14px;
+        fill:var(--muted);
+        transition:fill .18s ease}
+
+    /* small responsive */
+    @media (max-width:460px){.card{width:92%;padding:22px}.add-btn{width:100%;justify-content:center}}
+
+  </style>
+</head>
+<body>
+  <div class="card" role="application" aria-label="To-Do List">
+    <h1>To-Do List</h1>
+    <button class="sort-btn" id="sortBtn" title="Toggle sort (A→Z / Z→A)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 3v12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 21V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 18h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <div class="input-wrap">
+      <input id="taskInput" class="input" placeholder="Add a new task..." aria-label="New task" />
+      <button id="clearInput" class="clear-btn" title="Clear input" aria-label="Clear input">✕</button>
+    </div>
+
+    <div class="list-wrap" id="listWrap" aria-live="polite">
+      <!-- tasks inserted here -->
+    </div>
+
+    <div style="display:flex;justify-content:center">
+      <button id="addBtn" class="add-btn" aria-label="Add task">
+        <span class="add-icon">+</span>
+        <span>Add</span>
+      </button>
+    </div>
+
+    <!-- reference to uploaded image (local path). If running in environment where the path is served, it will appear. -->
+    <img src="/mnt/data/Image 21.11.25 at 12.42.jpeg" alt="design reference" style="position:absolute;right:8px;bottom:8px;width:56px;opacity:0.06;pointer-events:none;border-radius:8px">
+  </div>
+
+  <script>
+    // Basic Todo functionality with sorting and hover-effect on delete (handled by CSS)
+    const input = document.getElementById('taskInput');
+    const addBtn = document.getElementById('addBtn');
+    const listWrap = document.getElementById('listWrap');
+    const clearInput = document.getElementById('clearInput');
+    const sortBtn = document.getElementById('sortBtn');
+
+    let tasks = JSON.parse(localStorage.getItem('tasks')||'[]');
+    let sortAsc = true;
+
+    function save(){localStorage.setItem('tasks', JSON.stringify(tasks))}
+
+    function render(){
+      // optionally sort
+      const list = [...tasks];
+      list.sort((a,b)=>{
+        if(a.text.toLowerCase() < b.text.toLowerCase()) return sortAsc ? -1:1;
+        if(a.text.toLowerCase() > b.text.toLowerCase()) return sortAsc ? 1:-1;
+        return 0;
+      });
+
+      listWrap.innerHTML = '';
+      if(list.length===0){
+        listWrap.innerHTML = '<div style="padding:20px;color:var(--muted);text-align:center">No tasks yet</div>';
+        return;
+      }
+
+      list.forEach((t, idx)=>{
+        const row = document.createElement('div');
+        row.className = 'task';
+
+        const span = document.createElement('div');
+        span.className = 'task-text';
+        span.textContent = t.text;
+
+        const del = document.createElement('button');
+        del.className = 'delete-btn';
+        del.title = 'Delete task';
+        del.setAttribute('aria-label', 'Delete '+t.text);
+        del.innerHTML = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 6L6 18M6 6l12 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+        del.addEventListener('click', ()=>{
+          // find index in tasks array (not sorted view)
+          const realIndex = tasks.findIndex(x=>x.id===t.id);
+          if(realIndex>-1){ tasks.splice(realIndex,1); save(); render(); }
+        });
+
+        row.appendChild(span);
+        row.appendChild(del);
+        listWrap.appendChild(row);
+      });
+    }
+
+    function addTask(text){
+      const trimmed = text.trim();
+      if(!trimmed) return;
+      tasks.push({id:Date.now()+Math.random(), text:trimmed});
+      save(); render(); input.value=''; input.focus();
+    }
+
+    addBtn.addEventListener('click', ()=>{
+  // Əgər input gizlidirsə, onu göstər
+  if(input.style.display === "none"){
+    showInput();
+  } 
+  else {
+    addTask(input.value);
+    hideInput();
+  }
+});
+
+    input.addEventListener('keydown', e=>{
+  if(e.key==='Enter'){
+    addTask(input.value);
+    hideInput();   // input gizlənir
+  }
+});
+
+    clearInput.addEventListener('click', ()=>{ input.value=''; input.focus(); });
+
+    sortBtn.addEventListener('click', ()=>{ sortAsc = !sortAsc; render(); sortBtn.style.opacity = sortAsc?0.95:0.6 });
+
+    function hideInput(){
+  input.style.display = "none";
+  clearInput.style.display = "none";
+}
+function showInput(){
+  input.style.display = "block";
+  clearInput.style.display = "block";
+  input.focus();
+}
+
+    // init
+    render();
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
