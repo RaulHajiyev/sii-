@@ -1,5 +1,143 @@
+ :root{
+      --purple1:#7b47e6;
+      --purple2:#6b33d8;
+      --border:#dedede;
+      --muted:#9b9b9b;
+      --yellow:#ffdf66;
+      --bg:#fafafa;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    body{background:var(--bg);display:flex;align-items:center;justify-content:center;height:100vh;margin:0}
 
+    .card{
+      width:420px;
+      background:white;
+      border-radius:14px;
+      border:1px solid var(--border);
+      padding:28px 34px 40px;
+      position:relative;
+      box-shadow:0 2px 0 rgba(0,0,0,0.02);
+    }
 
+    .card::before{
+      
+      content:'';
+      position:absolute;
+      left:12px;
+      right:12px;
+      top:8px;
+      height:32px;
+      border-radius:10px;
+      background:var(--yellow);
+    }
 
+    h1{
+        font-size:36px;
+        text-align:center;
+        margin:20px 0 26px;
+        font-weight:800}
 
+    
+    .sort-btn{
+      position:absolute;
+      right:18px;
+      top:56px;
+      color:var(--muted);
+      border:none;
+      background:transparent;
+      cursor:pointer;
+      font-size:18px;
+      display:flex;
+      align-items:center;
+      gap:6px
+    }
+    .sort-btn svg{opacity:0.9}
 
+    .input-wrap{
+        display:flex;
+        align-items:center;
+        gap:12px;
+        margin-bottom:28px}
+    .input{
+      flex:1;
+      padding:18px 20px;
+      border-radius:18px;
+      border:2px solid var(--border);
+      font-size:16px;
+      outline:none
+    }
+    .clear-btn{
+        background:transparent;
+        border:2px solid var(--border);
+        width:42px;
+        height:42px;
+        border-radius:50%;
+        display:inline-grid;
+        place-items:center;
+        cursor:pointer}
+
+    
+    .add-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:14px;
+      background:linear-gradient(90deg,var(--purple1),var(--purple2));
+      color:white;
+      padding:16px 28px;
+      border-radius:40px;
+      border:none;
+      font-size:18px;
+      cursor:pointer;
+      box-shadow:0 6px 18px rgba(107,51,216,0.18)
+    }
+    .add-icon{
+        width:46px;
+        height:46px;
+        border-radius:50%;
+        background:rgba(255,255,255,0.08);
+        display:inline-grid;
+        place-items:center;
+        font-weight:700}
+
+    
+    .list-wrap{
+        border:1px solid var(--border);
+        border-radius:12px;
+        padding:18px;
+        margin-bottom:26px;
+        background:white}
+    .task{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        padding:14px 6px;
+        border-radius:8px}
+    .task + .task{
+        border-top:1px solid #f0f0f0}
+    .task-text{font-size:18px}
+
+        .delete-btn{
+      width:36px;
+      height:36px;
+      border-radius:50%;
+      border:2px solid var(--border);
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      transition:all .18s ease;
+      position:relative;
+      background:transparent
+    }
+    .delete-btn:hover{
+        background:var(--purple1);
+        border-color:var(--purple1);
+        transform:translateY(-4px) scale(1.03)}
+    .delete-btn:hover svg{fill:#fff}
+    .delete-btn svg{
+        width:14px;
+        height:14px;
+        fill:var(--muted);
+        transition:fill .18s ease}
+
+    

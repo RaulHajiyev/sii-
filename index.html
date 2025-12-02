@@ -28,7 +28,7 @@
     }
 
     .card::before{
-      
+     
       content:'';
       position:absolute;
       left:12px;
@@ -45,7 +45,7 @@
         margin:20px 0 26px;
         font-weight:800}
 
-    
+   
     .sort-btn{
       position:absolute;
       right:18px;
@@ -84,7 +84,7 @@
         place-items:center;
         cursor:pointer}
 
-    
+   
     .add-btn{
       display:inline-flex;
       align-items:center;
@@ -107,7 +107,7 @@
         place-items:center;
         font-weight:700}
 
-    
+ 
     .list-wrap{
         border:1px solid var(--border);
         border-radius:12px;
@@ -124,7 +124,8 @@
         border-top:1px solid #f0f0f0}
     .task-text{font-size:18px}
 
-        .delete-btn{
+   
+    .delete-btn{
       width:36px;
       height:36px;
       border-radius:50%;
@@ -175,12 +176,12 @@
       </button>
     </div>
 
-    
+
     <img src="/mnt/data/Image 21.11.25 at 12.42.jpeg" alt="design reference" style="position:absolute;right:8px;bottom:8px;width:56px;opacity:0.06;pointer-events:none;border-radius:8px">
   </div>
 
   <script>
-   
+    
     const input = document.getElementById('taskInput');
     const addBtn = document.getElementById('addBtn');
     const listWrap = document.getElementById('listWrap');
@@ -193,7 +194,7 @@
     function save(){localStorage.setItem('tasks', JSON.stringify(tasks))}
 
     function render(){
-      
+     
       const list = [...tasks];
       list.sort((a,b)=>{
         if(a.text.toLowerCase() < b.text.toLowerCase()) return sortAsc ? -1:1;
@@ -222,7 +223,7 @@
         del.innerHTML = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 6L6 18M6 6l12 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
         del.addEventListener('click', ()=>{
-          
+         
           const realIndex = tasks.findIndex(x=>x.id===t.id);
           if(realIndex>-1){ tasks.splice(realIndex,1); save(); render(); }
         });
@@ -277,6 +278,17 @@ function showInput(){
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
 
 
 
